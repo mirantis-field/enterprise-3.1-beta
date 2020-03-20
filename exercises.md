@@ -32,16 +32,17 @@ Choose the Ubuntu 16.04 or 18.04 AMI, unless an exercise specifies a different o
 2. Log into your Linux instance and install Docker Engine - Enterprise, as described in https://docs.docker.com/ee/docker-ee/ubuntu/.
 
 3. Install UCP 3.3.0 beta version on this first Linux instance:
-    
+
     a. Download the UCP offline bundle using the following command:
 
      `> curl -o ucp_images.tar.gz https://packages.docker.com/caas/ucp_images_3.3.0-beta1.tar.gz`
-     
+
     b. Load the UCP image using the following command:
 
      `> docker load < ucp_images.tar.gz`
-    
-    c. Run the following command to install UCP. Substitute the public IP address of your VM for the <public IP> placeholder.
+
+    c. Run the following command to install UCP. Substitute your password for `<password>` and the public IP address of your VM for the `<public IP>` placeholder.
+
     ```
     > docker container run \
       --rm \
@@ -50,40 +51,42 @@ Choose the Ubuntu 16.04 or 18.04 AMI, unless an exercise specifies a different o
       --name ucp \
       --volume /var/run/docker.sock:/var/run/docker.sock \
       docker/ucp:3.3.0-beta1 \
-      install --force-minimums --swarm-port 3376 --debug --admin-password m1r4n715ucp  --san <public IP>
+      install --force-minimums --debug --admin-password <password> --san <public IP>
     ```
-    
+
     d. You now have a single-node UCP cluster with that Linux instance as its Manager node.
-    
+
 4. If you need to add additional Linux instances to the cluster do the following:
-    
-    a. Use your browser on your local system to log into the UCP installation above. 
-    
+
+    a. Use your browser on your local system to log into the UCP installation above.
+
     b. Navigate to the nodes list and click on “Add Node” at the top right of the page.
-    
+
     c. In the Add Node page select "Linux" as the node type. Choose 'Worker' for the node role.
-    
-    d. Optionally, you may also select and set custom listen and advertise addresses. 
-    
+
+    d. Optionally, you may also select and set custom listen and advertise addresses.
+
     e. A command line will be generated that includes a `join-token`. It should look something like:
 
-       `docker swarm join ... --token <join-token> ...`. Copy over this command line from the UI for use later.
+       docker swarm join ... --token <join-token> ...
+
+     Copy over this command line from the UI for use later.
 
 5. For each additional Linux instance that you need to add to the cluster for your exercise, do the following:
-    
+
     a. Create the instance using the steps at https://aws.amazon.com/getting-started/tutorials/launch-a-virtual-machine,
        once again using the Ubuntu 16.04 or 18.04 AMIs, unless otherwise specified.
-    
+
     b. Log into your Linux instance and install Docker Engine - Enterprise, as described in https://docs.docker.com/ee/docker-ee/ubuntu/.
-    
+
     c. Download the UCP offline bundle using the following command:
 
-       `> curl -o ucp_images.tar.gz https://packages.docker.com/caas/ucp_images_3.3.0-beta1.tar.gz`
-    
+       > curl -o ucp_images.tar.gz https://packages.docker.com/caas/ucp_images_3.3.0-beta1.tar.gz
+
     d. Load the UCP image using the following command:
 
-       `> docker load < ucp_images.tar.gz`
-    
+       > docker load < ucp_images.tar.gz
+
     d. Add your Linux instance to the UCP cluster by running the swarm-join commandline generated above.
 
 ## Installing CLIs on your local system
@@ -118,7 +121,6 @@ to install and set up the 'docker' and 'kubectl' CLIs on your local system to ac
 
 ## Checking Kubernetes versions
 
-
 ```
 > kubectl version
 
@@ -131,13 +133,13 @@ Server Version: version.Info{Major:"1", Minor:"17+", GitVersion:"v1.17.2-docker-
 > docker version
 
 Client: Docker Engine - Enterprise
- Version:           18.09.0
- API version:       1.39
- Go version:        go1.10.4
- Git commit:        33a45cd
- Built:             Wed Nov  7 00:24:12 2018
+ Version:           19.03.5
+ API version:       1.40
+ Go version:        go1.12.12
+ Git commit:        2ee0c57
+ Built:             Wed Nov 13 07:33:38 2019
  OS/Arch:           darwin/amd64
- Experimental:      false
+ Experimental:      true
 
 Server: Docker Enterprise 3.1
  Engine:
@@ -161,7 +163,7 @@ Server: Docker Enterprise 3.1
   Version:          3.3.0-beta1
   ApiVersion:       1.40
   Arch:             amd64
-  BuildTime:        Fri Mar 13 17:34:14 UTC 2020 
+  BuildTime:        Fri Mar 13 17:34:14 UTC 2020
   GitCommit:        f54d47f
   GoVersion:        go1.13.8
   MinApiVersion:    1.20
@@ -252,22 +254,25 @@ Having installed a one-node Linux-only UCP cluster, we are now ready to add addi
 4. Optionally, you may also select and set custom listen and advertise addresses.
 5. A command line will be generated that includes a `join-token`. It should look something like:
 
-   `docker swarm join ... --token <join-token> ...`. 
-   
+   `docker swarm join ... --token <join-token> ...`
+
    Copy over this command line from the UI for use later.
 6. Create a Windows instance using the steps in https://aws.amazon.com/getting-started/tutorials/launch-windows-vm/.
    Choose one of the Windows 2019 AMIs that does not include containers. You will install Docker Engine in the next step.
 7. Log into your Windows VM and run the following commands in a powershell window with administrator rights. Do not use ISE.
    The [Enable-WindowsOptionalFeature...] command may require you to restart your computer. If you are asked to do that,
    you should continue with the next step after the restart.
+
     ```powershell
    $ Enable-WindowsOptionalFeature -Online -FeatureName containers -All
    $ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
    $ curl https://docker-ee-windows.s3-us-west-2.amazonaws.com/get-mirantis.ps1 -o install.ps1
    & ./install.ps1
    ```
+
 8. Refresh by logging out of and then back into the VM.
 9. Download and load the required Windows images in to the Docker engine on your Windows node:
+
   ```
   > curl -o ucp_images.tar.gz https://packages.docker.com/caas/ucp_images_win_2019_3.3.0-beta1.tar.gz
 
@@ -277,10 +282,11 @@ Having installed a one-node Linux-only UCP cluster, we are now ready to add addi
   >
   > docker load -i ucp_images.tar.gz
   ...
-  ```    
+  ```
+
 10. Add your Windows VM to the UCP cluster by running the swarm-join commandline generated above.
-11. Repeat steps 6 - 10 in order to create a second Windows VM and have it join the cluster.  
-    
+11. Repeat steps 6 - 10 in order to create a second Windows VM and have it join the cluster.
+
 ## Validating the cluster setup
 
 1. You can use either the UCP web interface or the command line to view your clusters.
@@ -288,15 +294,15 @@ Having installed a one-node Linux-only UCP cluster, we are now ready to add addi
     * Check the node status using this command on your local system:
 
         `kubectl get nodes`.
-    
+
     Your nodes should all have a status value of "Ready", as in the following example.
 
-        ```
+
         NAME                   STATUS   ROLES    AGE     VERSION
         ryan-135716-win-0      Ready    <none>   2m16s   v1.17.2
         ryan-7d985f-ubuntu-0   Ready    master   4m55s   v1.17.2-docker-d-2
         ryan-135716-win-1      Ready    <none>   1m12s   v1.17.2
-        ```
+
 2. Now that you have confirmed that the nodes are ready, the next step is to change the orchestrator to kubernetes for the pods.
 You can change the orchestrator using the UCP web interface, either by changing the default orchestrator in the Administrator settings,
 or by using the web interface to toggle the orchestrator after joining a node. The equivalent CLI command is
@@ -317,26 +323,31 @@ Handles  NPM(K)    PM(K)      WS(K)     CPU(s)     Id  SI ProcessName
 -------  ------    -----      -----     ------     --  -- -----------
     276      17    33284      40948      39.89   8132   0 tigera-calico
 ```
+
 The next troubleshooting step is to check the kubelet process.
 
 `PS C:\Users\Docker> Get-Process kubelet`
 
 You should see something like this.
+
 ```
 Handles  NPM(K)    PM(K)      WS(K)     CPU(s)     Id  SI ProcessName
 -------  ------    -----      -----     ------     --  -- -----------
     524      23    47332      73380     828.50   6520   0 kubelet
 ```
+
 After that check the kube-proxy process.
 
 `PS C:\Users\Docker> Get-Process kube-proxy`
 
 You should see something like this.
+
 ```
 Handles  NPM(K)    PM(K)      WS(K)     CPU(s)     Id  SI ProcessName
 -------  ------    -----      -----     ------     --  -- -----------
     322      19    25464      33488      21.00   7852   0 kube-proxy
 ```
+
 If any of the process checks show that something isn't working, the next step is to check the logs.
 For kubelet and kubeproxy, the logs are placed under "C:\k\logs>". Tigera/Calico logs are placed under "C:\TigeraCalico\logs".
 Note: Log retrieval on Windows nodes will be aligned with that on Linux nodes in the GA version.
@@ -353,19 +364,20 @@ Specifically, the procedure covers:
  - Kubernetes service provisioning
  - Addition of application workloads
  - Connectivity of Pods, Nodes and Services
- 
+
 1. Create a Namespace.
 
     ```
     $ kubectl create -f demo-namespace.yaml
     ```
-      ```yaml
-      # demo-namespace.yaml
-      apiVersion: v1
-      kind: Namespace
-      metadata:
-        name: demo
-      ```
+
+    ```yaml
+    # demo-namespace.yaml
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: demo
+    ```
 
 2. Create a web service as a Kubernetes service.
 
@@ -373,9 +385,10 @@ Specifically, the procedure covers:
     $ kubectl create -f win-webserver.yaml
     service/win-webserver created
     deployment.apps/win-webserver created
+
     $ kubectl get service --namespace demo
     NAME            TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
-    win-webserver   NodePort   10.96.29.12   <none>        80:35048/TCP   12m 
+    win-webserver   NodePort   10.96.29.12   <none>        80:35048/TCP   12m
     ```
 
     ```yaml
@@ -452,19 +465,21 @@ Specifically, the procedure covers:
 4. Access the web service by node-to-pod communication across the network.
 
     From a kubectl client:
+
    ```
-    $ kubectl get pods --namespace demo -o wide -w
+    $ kubectl get pods --namespace demo -o wide
 
     NAME                            READY   STATUS    RESTARTS   AGE   IP              NODE              NOMINATED NODE   READINESS GATES
     win-webserver-8c5678c68-qggzh   1/1     Running   0          16m   192.168.77.68   ryan-135716-win-1 <none>           <none>
-    win-webserver-8c5678c68-v8p84   1/1     Running   0          16m   192.168.4.206   ryan-135716-win-0 <none>           <none>    
+    win-webserver-8c5678c68-v8p84   1/1     Running   0          16m   192.168.4.206   ryan-135716-win-0 <none>           <none>
 
     $ ssh -o ServerAliveInterval=15 root@<master-node>
-    
+
     $ curl 10.96.29.12
     <html><body><H1>Windows Container Web Server</H1><p>IP 192.168.77.68 callerCount 1 </body></html>
     $
     ```
+
     Run the CURL command a second time. You can see the second request load-balanced to a different pod.
 
     ```
@@ -473,14 +488,14 @@ Specifically, the procedure covers:
     ```
 
 5. Access the web service by pod-to-pod communication across the network.
+
     ```
     $ kubectl get service --namespace demo
 
     NAME            TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
     win-webserver   NodePort   10.96.29.12   <none>        80:35048/TCP   12m
     $
-    $ kubectl get pods -o wide -w
-    $ kubectl get pods --namespace demo -o wide -w
+    $ kubectl get pods --namespace demo -o wide
 
     NAME                            READY   STATUS    RESTARTS   AGE   IP              NODE              NOMINATED NODE   READINESS GATES
     win-webserver-8c5678c68-qggzh   1/1     Running   0          16m   192.168.77.68   ryan-135716-win-1 <none>           <none>
@@ -492,7 +507,7 @@ Specifically, the procedure covers:
     (c) 2018 Microsoft Corporation. All rights reserved.
 
     C:\>curl 10.96.29.12
-    <html><body><H1>Windows Container Web Server</H1><p>IP 192.168.77.68 callerCount 1 <p>IP 192.168.77.68 callerCount 1 </body></html>  
+    <html><body><H1>Windows Container Web Server</H1><p>IP 192.168.77.68 callerCount 1 <p>IP 192.168.77.68 callerCount 1 </body></html>
     ```
 
 # Exercise 3: Istio Ingress for Kubernetes
@@ -537,7 +552,7 @@ Traffic in Istio is categorized as data plane traffic and control plane traffic.
 
 **Note** In order for development teams to use Istio Ingress, you must first configure the appropriate grants using the instructions provided at [Creating role grants](https://docs.docker.com/ee/ucp/admin/configure/configure-rbac-kube/#creating-role-grants).
 
-1. Open the UCP web UI. 
+1. Open the UCP web UI.
 2. Select **Admin Settings**.
 3. Select **Ingress**.
 4. Under the **Kubernetes** tab:
@@ -554,7 +569,7 @@ Traffic in Istio is categorized as data plane traffic and control plane traffic.
    * Under the **Gateways** tab, click **Create**.
    * Select the nodes on which this Gateway configuration will be applied.
    * Add the server details. These details describe the properties of the proxy on a given load balancer port.
-   * Click **Generate YML** to create the configuration file. 
+   * Click **Generate YML** to create the configuration file.
 
 **Note** You also have the option to create or upload your own YAML configuration file.
 
@@ -575,11 +590,11 @@ To create a virtual service:
 2. Select **Ingress**.
 3. Under the **Virtual Services** tab, click **Create**.
     * Enter a name for the virtual service.
-    * Add the destination hosts to which traffic is being sent.  
+    * Add the destination hosts to which traffic is being sent.
     * Add the gateways.
     * Click **Generate YML** to create the configuration file.
 
-   **Note** You also have the option to create or upload your own YAML configuration file. 
+   **Note** You also have the option to create or upload your own YAML configuration file.
    * Click **Skip to YAML Editor**.
 
 Sample YAML configuration file:
@@ -639,7 +654,7 @@ kind: VirtualService
 metadata:
   name: httpbin-vs
 spec:
-  gateways: 
+  gateways:
   - application-gateway
   hosts:
   - '*'
@@ -684,8 +699,8 @@ To create a canary deployment, the administrator creates a Destination Rules for
 
 1. Add the Istio Destination Rule in the namespace where the application is deployed. This creates the service subsets needed for the Virtual Service’s matcher, based on Kubernetes pod labels.
 2. Edit the existing Virtual Service and add the needed routing policy, matching by destination rule.
-3. In the Virtual Service configuration, specify the weight of each version. 
-4. Gradually increase the weight of the new version, until it reaches 100%. 
+3. In the Virtual Service configuration, specify the weight of each version.
+4. Gradually increase the weight of the new version, until it reaches 100%.
 5. Additionally, use the [Kubernetes Autoscaler](https://kubernetes.io/docs/tasks/administer-cluster/cluster-management/#cluster-autoscaling) to make sure that there are always available instances.
 
 #### Blacklisting
@@ -694,7 +709,9 @@ To prevent DoS attacks, the administrator can blacklist the offending IP address
 
 1. Create a handler, instance, and rule, which combined will filter out any requests from IP addresses specified in the Handler’s override spec:
 
-   `kubectl apply -f`
+    ```
+    kubectl apply -f
+    ```
 
 2. Use the x-forwarded-for header that Istio automatically attaches.
 3. Update the UCP config file, updating `cluster_config.service_mesh.ingress_preserve_client_ip` to `true`.
@@ -747,8 +764,6 @@ spec:
 * [What is Istio?](https://istio.io/docs/concepts/what-is-istio/)
 * [Kubernetes Cluster Ingress (Experimental)](https://docs.docker.com/ee/ucp/kubernetes/cluster-ingress/)
 
-
-
 # Exercise 4: GPU support for Kubernetes workloads
 
 Docker Enterprise now includes GPU support for Kubernetes workloads. This exercise walks you through setting up your system
@@ -776,85 +791,93 @@ This procedure will install the NVIDIA driver via runfile on your Linux host. Th
 `lspci | grep -i nvidia`
 
 2. Verify that your GPU is present in the [list of supported NVIDIA GPU products](http://download.nvidia.com/XFree86/Linux-x86_64/440.59/README/supportedchips.html).
-3. Install [dependencies](http://us.download.nvidia.com/XFree86/Linux-x86_64/440.59/README/minimumrequirements.html). 
-4. Make sure that your system is up-to-date, and you are running the latest kernel. 
+3. Install [dependencies](http://us.download.nvidia.com/XFree86/Linux-x86_64/440.59/README/minimumrequirements.html).
+4. Make sure that your system is up-to-date, and you are running the latest kernel.
 5. Install the following packages depending on your OS.
 
-  * Ubuntu: 
-  
-     `sudo apt-get install -y gcc make curl linux-headers-$(uname -r)`
-  * RHEL: 
-  
-    `sudo yum install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r) gcc make curl elfutils-libelf-devel`
+  * Ubuntu:
 
-6. Ensure that `i2c_core` and `ipmi_msghandler` kernel modules are loaded: 
+    ```
+    sudo apt-get install -y gcc make curl linux-headers-$(uname -r)
+    ```
 
-   `sudo modprobe -a i2c_core ipmi_msghandler`
+  * RHEL:
+
+    ```
+    sudo yum install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r) gcc make curl elfutils-libelf-devel
+    ```
+
+6. Ensure that `i2c_core` and `ipmi_msghandler` kernel modules are loaded:
+
+    ```
+    sudo modprobe -a i2c_core ipmi_msghandler
+    ```
 
    To persist the change across reboots:
 
-   `echo -e "i2c_core\nipmi_msghandler" | sudo tee /etc/modules-load.d/nvidia.conf`
+    ```
+    echo -e "i2c_core\nipmi_msghandler" | sudo tee /etc/modules-load.d/nvidia.conf
+    ```
 
    All of the NVIDIA libraries are present under the specific directory on the host:
-   ```
-   NVIDIA_OPENGL_PREFIX=/opt/kubernetes/nvidia
-   sudo mkdir -p $NVIDIA_OPENGL_PREFIX/lib
-   echo "${NVIDIA_OPENGL_PREFIX}/lib" | sudo tee /etc/ld.so.conf.d/nvidia.conf
-   sudo ldconfig
-   ```
+    ```
+    NVIDIA_OPENGL_PREFIX=/opt/kubernetes/nvidia
+    sudo mkdir -p $NVIDIA_OPENGL_PREFIX/lib
+    echo "${NVIDIA_OPENGL_PREFIX}/lib" | sudo tee /etc/ld.so.conf.d/nvidia.conf
+    sudo ldconfig
+    ```
 
 7. Run the installation:
-```
-NVIDIA_DRIVER_VERSION=440.59
-curl -LSf https://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_DRIVER_VERSION}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run -o nvidia.run
-```
+
+    ```
+    NVIDIA_DRIVER_VERSION=440.59
+    curl -LSf https://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_DRIVER_VERSION}/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run -o nvidia.run
+    ```
 
 **Note** `--opengl-prefix` must be set to `/opt/kubernetes/nvidia`: `sudo sh nvidia.run --opengl-prefix="${NVIDIA_OPENGL_PREFIX}"`
 
 8. Load the NVIDIA Unified Memory kernel module and create device files for the module on startup:
-```
-sudo tee  /etc/systemd/system/nvidia-modprobe.service << END
 
+    ```
+    sudo tee /etc/systemd/system/nvidia-modprobe.service << END
+    [Unit]
+    Description=NVIDIA modprobe
 
-[Unit]
-Description=NVIDIA modprobe
+    [Service]
+    Type=oneshot
+    RemainAfterExit=yes
+    ExecStart=/usr/bin/nvidia-modprobe -c0 -u
 
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-ExecStart=/usr/bin/nvidia-modprobe -c0 -u
+    [Install]
+    WantedBy=multi-user.target
+    END
 
-[Install]
-WantedBy=multi-user.target
-END
-
-sudo systemctl enable nvidia-modprobe
-sudo systemctl start nvidia-modprobe
-```
+    sudo systemctl enable nvidia-modprobe
+    sudo systemctl start nvidia-modprobe
+    ```
 
 9. Enable the NVIDIA persistence daemon to initialize GPUs and keep them initialized:
 
-```sudo tee /etc/systemd/system/nvidia-persistenced.service << END
+    ```
+    sudo tee /etc/systemd/system/nvidia-persistenced.service << END
+    [Unit]
+    Description=NVIDIA Persistence Daemon
+    Wants=syslog.target
 
+    [Service]
+    Type=forking
+    PIDFile=/var/run/nvidia-persistenced/nvidia-persistenced.pid
+    Restart=always
+    ExecStart=/usr/bin/nvidia-persistenced --verbose
+    ExecStopPost=/bin/rm -rf /var/run/nvidia-persistenced
 
-[Unit]
-Description=NVIDIA Persistence Daemon
-Wants=syslog.target
+    [Install]
+    WantedBy=multi-user.target
+    END
 
-[Service]
-Type=forking
-PIDFile=/var/run/nvidia-persistenced/nvidia-persistenced.pid
-Restart=always
-ExecStart=/usr/bin/nvidia-persistenced --verbose
-ExecStopPost=/bin/rm -rf /var/run/nvidia-persistenced
-
-[Install]
-WantedBy=multi-user.target
-END
-
-sudo systemctl enable nvidia-persistenced
-sudo systemctl start nvidia-persistenced
-```
+    sudo systemctl enable nvidia-persistenced
+    sudo systemctl start nvidia-persistenced
+    ```
 
 See [Driver Persistence](https://docs.nvidia.com/deploy/driver-persistence/index.html) for more information.
 
@@ -936,21 +959,21 @@ To consume GPUs from your container, request `nvidia.com/gpu` in the `limits` se
     NAME                        READY   STATUS    RESTARTS   AGE
     gpu-test-747d746885-hpv74   1/1     Running   0          14m
     ```
-    
+
 3. Check the logs and look for `Result = PASS` to verify successful completion:
 
     ```
     kubectl logs <name of the pod>
-    
+
     deviceQuery Starting...
-    
+
     CUDA Device Query (Runtime API) version (CUDART static linking)
-    
+
     Detected 1 CUDA Capable device(s)
-    
+
     Device 0: "Tesla V100-SXM2-16GB"
     ...
-    
+
     deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 10.2, CUDA Runtime Version = 10.2, NumDevs = 1
     Result = PASS
     ```
@@ -1002,7 +1025,7 @@ Remove the deployment and corresponding pods:
 ```
 kubectl delete deployment gpu-test
 ```
-    
+
 ## Related information
 
 * [Schedule GPUs](https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/)
