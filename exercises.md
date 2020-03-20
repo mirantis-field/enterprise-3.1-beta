@@ -301,7 +301,7 @@ Having installed a one-node Linux-only UCP cluster, we are now ready to add addi
 You can change the orchestrator using the UCP web interface, either by changing the default orchestrator in the Administrator settings,
 or by using the web interface to toggle the orchestrator after joining a node. The equivalent CLI command is
 
-  `docker node update <node name> --label-add com.docker.ucp.orchestrator.kubernetes=true`
+   `docker node update <node name> --label-add com.docker.ucp.orchestrator.kubernetes=true`
 
 3. Optionally, you can deploy a workload on the cluster to make sure everything is working as expected.
 
@@ -375,8 +375,7 @@ Specifically, the procedure covers:
     deployment.apps/win-webserver created
     $ kubectl get service --namespace demo
     NAME            TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
-    win-webserver   NodePort   10.96.29.12   <none>        80:35048/TCP   12m
-    $    
+    win-webserver   NodePort   10.96.29.12   <none>        80:35048/TCP   12m 
     ```
 
     ```yaml
@@ -575,12 +574,13 @@ To create a virtual service:
 1. Select **Kubernetes**.
 2. Select **Ingress**.
 3. Under the **Virtual Services** tab, click **Create**.
-  * Enter a name for the virtual service.
-  * Add the destination hosts to which traffic is being sent.  
-  * Add the gateways.
-  * Click **Generate YML** to create the configuration file.
+    * Enter a name for the virtual service.
+    * Add the destination hosts to which traffic is being sent.  
+    * Add the gateways.
+    * Click **Generate YML** to create the configuration file.
 
-**Note** You also have the option to create or upload your own YAML configuration file. Click **Skip to YAML Editor**.
+   **Note** You also have the option to create or upload your own YAML configuration file. 
+   * Click **Skip to YAML Editor**.
 
 Sample YAML configuration file:
 
@@ -814,6 +814,8 @@ curl -LSf https://us.download.nvidia.com/XFree86/Linux-x86_64/${NVIDIA_DRIVER_VE
 8. Load the NVIDIA Unified Memory kernel module and create device files for the module on startup:
 ```
 sudo tee  /etc/systemd/system/nvidia-modprobe.service << END
+
+
 [Unit]
 Description=NVIDIA modprobe
 
@@ -833,6 +835,8 @@ sudo systemctl start nvidia-modprobe
 9. Enable the NVIDIA persistence daemon to initialize GPUs and keep them initialized:
 
 ```sudo tee /etc/systemd/system/nvidia-persistenced.service << END
+
+
 [Unit]
 Description=NVIDIA Persistence Daemon
 Wants=syslog.target
