@@ -61,20 +61,21 @@ Minimum system requirements for Windows Server 2019 worker node:
 * Windows Server Node VXLAN overlay network data plane in Kubernetes
     * Windows Server and Linux are now normalized to both use VXLAN
     * Overlay networking applied to ensure seamless communication between cluster nodes
-    * No longer requires BGP control plane (when using VXLAN) 
+    * No longer requires BGP control plane (when using VXLAN)
+    * Upgrade is not supported for VXLAN data plane. Only IPIP is supported. In this case windows nodes will not be part of kube cluster.
 * In this release of Docker Enterprise we upgraded the Kubernetes version used by UCP from 1.14.8 (in UCP 3.2) to 1.17.2. For information about Kubernetes changes see [Kubernetes v1.17 Release Notes](https://kubernetes.io/docs/setup/release/notes/).
 
 ### Known issues
 
 * Online install fails to pull required image on Windows Server
-    * When installing UCP on a cluster with Windows nodes, you must manually pull the following images on all Windows Server 2019 nodes in your cluster before installing:
-    `docker pull docker/ucp-kube-binaries-win:3.3.0-beta1`
-    `docker pull docker/ucp-containerd-shim-process-win:3.3.0-beta1`
-    * If you fail to pre-pull the images the Windows Server nodes will fail to come online
 * In this release of Docker Enterprise we upgraded the Kubernetes version used by UCP from 1.14.8 (in UCP 3.2) to 1.17.2.
 * The UCP web interface has inconsistencies and unexpected behavior when interacting with the system. To work around this, use the command line tools when necessary.
 * You cannot configure VXLAN MTU and port on Windows Server. There is currently no workaround.
-* Swarm overlay networking fails between Linux hosts and hosts not running a pod. The workaround is to schedule at least one Kubernetes pod for each Windows Server node
+* After vSwitch creation happens on windows node, connection to metadata server will be lost.  It is known MSFT issue.
+* When kubernetes deployment is scaled up so that number of pods on Windows node is increased (e.g., kubectl scale --replicas=30 deployment.apps/win-nano) it sometimes cause nodes to become "not ready".
+  Related upstream issue: `https://github.com/kubernetes/kubernetes/issues/88153`
+  Frequency of the issue occurrence depends on node flavor (less vCPUs - more frequent) and on the scaling step (bigger step - more frequent).
+  Please use node flavors with bigger vCPU count (8 or more) and smaller pods scaling step to reduce probability of the issue.
 * About 4% of Windows Server nodes may not join the cluster. The workaround is to redeploy the failed nodes.
 * You may see a 'Failed to compute desired number of replicas based on listed metrics' in the Istio logs. You may ignore this error.
 * When reducing the number of gateways using the UCP web interface, the change will not take effect. The workaround is to toggle Istio off and back on again to lower the number of gateway replicas. Increasing replicas behaves appropriately, no workaround is needed for increases. CRDs from pre-existing Istio installation will be overwritten. To avoid this error, don’t install in clusters where Istio is already installed.
