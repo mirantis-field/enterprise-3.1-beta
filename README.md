@@ -1,14 +1,18 @@
 # Docker Enterprise 3.1 Beta Release Notes
 
-**Version 2**
+**Version 3**
 
-2020-03-18
+2020-04-06
 
 Learn about new features, bug fixes, breaking changes, and known issues for the beta release of Docker Enterprise 3.1 and the corresponding versions of DTR 2.8.0 and UCP 3.3.0.
 
 ## Docker Trusted Registry (DTR) version 2.8.0
 
-2020-03-16
+2020-04-06
+
+### New features
+
+* In previous versions of DTR, vulnerability reports and promotion policies used the CVSS v2.0 scoring system. Now, DTR can be configured to use either CVSS v2.0 or CVS v3.0. This is a global setting that can be changed at any time. 
 
 ### Bug fixes
 
