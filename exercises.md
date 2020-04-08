@@ -300,8 +300,11 @@ Having installed a one-node Linux-only UCP cluster, we are now ready to add addi
      -UseBasicParsing;
 
    # Execute the installation script
-   ./install.ps1 -dockerVersion '19.03.5';
+   .\install.ps1 -dockerVersion '19.03.5';
 
+   # Logoff and log back in for PATH variables to be updated
+   logoff
+   
    # Clean up installation script
    Remove-Item -Path 'install.ps1';
    ```
