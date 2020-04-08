@@ -310,6 +310,9 @@ Having installed a one-node Linux-only UCP cluster, we are now ready to add addi
 9. Download and load the required Windows container images in to the Docker engine on your Windows Server node:
 
    ```powershell
+   # Turn off PowerShell's status bar (greatly increases download performance of large files)
+   $ProgressPreference = 'SilentlyContinue'
+   
    # Download bundled UCP images
    Invoke-WebRequest `
      -OutFile 'ucp_images.tar.gz' `
