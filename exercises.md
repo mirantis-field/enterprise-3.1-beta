@@ -29,14 +29,23 @@ instructions for each of the exercises below.
 1. Create the first Linux instance using the steps at https://aws.amazon.com/getting-started/tutorials/launch-a-virtual-machine.
    Choose the Ubuntu 16.04 or 18.04 AMI, unless an exercise specifies a different one.
 
-2. Log into your Linux instance and install Docker Engine - Enterprise, as described in https://docs.docker.com/ee/docker-ee/ubuntu/.
+2. Log into your Linux instance and install Docker Engine - Enterprise as described in https://docs.docker.com/ee/docker-ee/ubuntu/ with `DOCKER_EE_URL` provided for Beta Release and using *test-19.03* instead of *stable* repository. Ignore "W: Skipping acquire of configured file" warnings in output.
+
+   Verify that correct version of Docker Engine - Enterprise is installed using the following command:
+
+   ```bash
+   $ docker info | grep Server
+
+   Server:
+   Server Version: 19.03.8-beta3
+   ```
 
 3. Install UCP 3.3.0 beta version on this first Linux instance:
 
    a. Download the UCP offline bundle using the following command:
 
    ```bash
-   $ curl -o ucp_images.tar.gz https://packages.docker.com/caas/ucp_images_3.3.0-beta1.tar.gz
+   $ curl -o ucp_images.tar.gz https://packages.docker.com/caas/tmp/ucp_images_3.3.0-tp6.tar.gz
    ```
 
    b. Load the UCP image using the following command:
@@ -54,12 +63,13 @@ instructions for each of the exercises below.
      --tty \
      --name ucp \
      --volume /var/run/docker.sock:/var/run/docker.sock \
-     docker/ucp:3.3.0-beta1 \
+     dockereng/ucp:3.3.0-tp6 \
      install \
      --admin-password <password> \
      --debug \
      --force-minimums \
-     --san <public IP>
+     --san <public IP> \
+     --image-version dev:
    ```
 
    d. You now have a single-node UCP cluster with that Linux instance as its Manager node.
@@ -87,12 +97,21 @@ instructions for each of the exercises below.
    a. Create the instance using the steps at https://aws.amazon.com/getting-started/tutorials/launch-a-virtual-machine,
    once again using the Ubuntu 16.04 or 18.04 AMIs, unless otherwise specified.
 
-   b. Log into your Linux instance and install Docker Engine - Enterprise, as described in https://docs.docker.com/ee/docker-ee/ubuntu/.
+   b. Log into your Linux instance and install Docker Engine - Enterprise as described in https://docs.docker.com/ee/docker-ee/ubuntu/ with `DOCKER_EE_URL` provided for Beta Release and using *test-19.03* instead of *stable* repository. Ignore "W: Skipping acquire of configured file" warnings in output.
+
+   c. Verify that correct version of Docker Engine - Enterprise is installed using the following command:
+
+   ```bash
+   $ docker info | grep Server
+
+   Server:
+   Server Version: 19.03.8-beta3
+   ```
 
    c. Download the UCP offline bundle using the following command:
 
    ```bash
-   $ curl -o ucp_images.tar.gz https://packages.docker.com/caas/ucp_images_3.3.0-beta1.tar.gz
+   $ curl -o ucp_images.tar.gz https://packages.docker.com/caas/tmp/ucp_images_3.3.0-tp6.tar.gz
    ```
 
    d. Load the UCP image using the following command:
