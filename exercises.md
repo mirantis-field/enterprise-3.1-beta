@@ -29,14 +29,14 @@ instructions for each of the exercises below.
 1. Create the first Linux instance using the steps at https://aws.amazon.com/getting-started/tutorials/launch-a-virtual-machine.
    Choose the Ubuntu 16.04 or 18.04 AMI, unless an exercise specifies a different one.
 
-2. Log into your Linux instance and install Docker Engine - Enterprise, as described in https://docs.docker.com/ee/docker-ee/ubuntu/.
+2. Log into your Linux instance and install Docker Engine - Enterprise, as described in https://docs.docker.com/ee/docker-ee/ubuntu/ with the exception of using the `test` repository instead of `stable` which will provide the `19.03.8-beta3` engine.  For RHEL, you will need to enable the `docker-ee-test-19.03` test repo.
 
 3. Install UCP 3.3.0 beta version on this first Linux instance:
 
    a. Download the UCP offline bundle using the following command:
 
    ```bash
-   $ curl -o ucp_images.tar.gz https://packages.docker.com/caas/ucp_images_3.3.0-beta1.tar.gz
+   $ curl -o ucp_images.tar.gz https://packages.docker.com/caas/ucp_images_3.3.0-beta3.tar.gz
    ```
 
    b. Load the UCP image using the following command:
@@ -54,7 +54,7 @@ instructions for each of the exercises below.
      --tty \
      --name ucp \
      --volume /var/run/docker.sock:/var/run/docker.sock \
-     docker/ucp:3.3.0-beta1 \
+     docker/ucp:3.3.0-beta3 \
      install \
      --admin-password <password> \
      --debug \
@@ -92,7 +92,7 @@ instructions for each of the exercises below.
    c. Download the UCP offline bundle using the following command:
 
    ```bash
-   $ curl -o ucp_images.tar.gz https://packages.docker.com/caas/ucp_images_3.3.0-beta1.tar.gz
+   $ curl -o ucp_images.tar.gz https://packages.docker.com/caas/ucp_images_3.3.0-beta3.tar.gz
    ```
 
    d. Load the UCP image using the following command:
@@ -296,15 +296,15 @@ Having installed a one-node Linux-only UCP cluster, we are now ready to add addi
    # Download the installation script
    Invoke-WebRequest `
      -OutFile 'install.ps1' `
-     -Uri 'https://docker-ee-windows.s3-us-west-2.amazonaws.com/get-mirantis.ps1' `
+     -Uri 'https://get.mirantis.com/install.ps1' `
      -UseBasicParsing;
 
    # Execute the installation script
-   .\install.ps1 -dockerVersion '19.03.5';
+   .\install.ps1 -Channel 'test' -dockerVersion '19.03.8-beta3';
 
    # Logoff and log back in for PATH variables to be updated
    logoff
-   
+
    # Clean up installation script
    Remove-Item -Path 'install.ps1';
    ```
@@ -315,11 +315,11 @@ Having installed a one-node Linux-only UCP cluster, we are now ready to add addi
    ```powershell
    # Turn off PowerShell's status bar (greatly increases download performance of large files)
    $ProgressPreference = 'SilentlyContinue'
-   
+
    # Download bundled UCP images
    Invoke-WebRequest `
      -OutFile 'ucp_images.tar.gz' `
-     -Uri 'https://packages.docker.com/caas/ucp_images_win_2019_3.3.0-beta1.tar.gz' `
+     -Uri 'https://packages.docker.com/caas/ucp_images_win_2019_3.3.0-beta3.tar.gz' `
      -UseBasicParsing;
 
    # Load the archive of UCP images into Docker
