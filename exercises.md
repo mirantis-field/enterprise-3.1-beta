@@ -29,14 +29,14 @@ instructions for each of the exercises below.
 1. Create the first Linux instance using the steps at https://aws.amazon.com/getting-started/tutorials/launch-a-virtual-machine.
    Choose the Ubuntu 16.04 or 18.04 AMI, unless an exercise specifies a different one.
 
-2. Log into your Linux instance and install Docker Engine - Enterprise, as described in https://docs.docker.com/ee/docker-ee/ubuntu/.
+2. Log into your Linux instance and install Docker Engine - Enterprise, as described in https://docs.docker.com/ee/docker-ee/ubuntu/ with the exception of using the `test` repository instead of `stable` which will provide the `19.03.8-beta3` engine.  For RHEL, you will need to enable the `docker-ee-test-19.03` test repo.
 
 3. Install UCP 3.3.0 beta version on this first Linux instance:
 
    a. Download the UCP offline bundle using the following command:
 
    ```bash
-   $ curl -o ucp_images.tar.gz https://packages.docker.com/caas/ucp_images_3.3.0-beta1.tar.gz
+   $ curl -o ucp_images.tar.gz https://packages.docker.com/caas/ucp_images_3.3.0-beta3.tar.gz
    ```
 
    b. Load the UCP image using the following command:
@@ -54,7 +54,7 @@ instructions for each of the exercises below.
      --tty \
      --name ucp \
      --volume /var/run/docker.sock:/var/run/docker.sock \
-     docker/ucp:3.3.0-beta1 \
+     docker/ucp:3.3.0-beta3 \
      install \
      --admin-password <password> \
      --debug \
@@ -92,7 +92,7 @@ instructions for each of the exercises below.
    c. Download the UCP offline bundle using the following command:
 
    ```bash
-   $ curl -o ucp_images.tar.gz https://packages.docker.com/caas/ucp_images_3.3.0-beta1.tar.gz
+   $ curl -o ucp_images.tar.gz https://packages.docker.com/caas/ucp_images_3.3.0-beta3.tar.gz
    ```
 
    d. Load the UCP image using the following command:
@@ -137,15 +137,12 @@ to install and set up the 'docker' and 'kubectl' CLIs on your local system to ac
 
 ```bash
 $ kubectl version
-
-Client Version: version.Info{Major:"1", Minor:"17", GitVersion:"v1.17.3", GitCommit:"06ad960bfd03b39c8310aaf92d1e7c12ce618213", GitTreeState:"clean", BuildDate:"2020-02-11T18:14:22Z", GoVersion:"go1.13.6", Compiler:"gc", Platform:"linux/amd64"}
-Server Version: version.Info{Major:"1", Minor:"17+", GitVersion:"v1.17.2-docker-d-2", GitCommit:"ae40ab25c94b30bfd3034be3056cd84318e97a2f", GitTreeState:"clean", BuildDate:"2020-02-05T20:42:57Z", GoVersion:"go1.13.6", Compiler:"gc", Platform:"linux/amd64"}
-
+Client Version: version.Info{Major:"1", Minor:"17", GitVersion:"v1.17.4", GitCommit:"8d8aa39598534325ad77120c120a22b3a990b5ea", GitTreeState:"clean", BuildDate:"2020-03-12T21:03:42Z", GoVersion:"go1.13.8", Compiler:"gc", Platform:"darwin/amd64"}
+Server Version: version.Info{Major:"1", Minor:"17+", GitVersion:"v1.17.4-docker-3", GitCommit:"86893395d1d71a1124c208abe28ed8ac014fde17", GitTreeState:"clean", BuildDate:"2020-03-31T23:36:27Z", GoVersion:"go1.13.9", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
 ```bash
 $ docker version
-
 Client: Docker Engine - Enterprise
  Version:           19.03.5
  API version:       1.40
@@ -157,39 +154,39 @@ Client: Docker Engine - Enterprise
 
 Server: Docker Enterprise 3.1
  Engine:
-  Version:          19.03.8-beta1
+  Version:          19.03.8-beta3
   API version:      1.40 (minimum version 1.12)
-  Go version:       go1.12.16
-  Git commit:       61dfab2
-  Built:            Tue Mar 10 21:43:48 2020
+  Go version:       go1.12.17
+  Git commit:       0418990fcb
+  Built:            Thu Apr  2 13:50:28 2020
   OS/Arch:          linux/amd64
   Experimental:     false
  containerd:
-  Version:          1.2.10
-  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339
+  Version:          1.3.3
+  GitCommit:        d76c121f76a5fc8a462dc64594aea72fe18e1178
  runc:
-  Version:          1.0.0-rc8+dev
-  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657
+  Version:          1.0.0-rc10
+  GitCommit:        dc9208a3303feef5b3839f4323d9beb36df0a9dd
  docker-init:
   Version:          0.18.0
   GitCommit:        fec3683
  Universal Control Plane:
-  Version:          3.3.0-beta1
+  Version:          3.3.0-beta3
   ApiVersion:       1.40
   Arch:             amd64
-  BuildTime:        Fri Mar 13 17:34:14 UTC 2020
-  GitCommit:        f54d47f
+  BuildTime:        Tue Apr 14 20:32:33 UTC 2020
+  GitCommit:        16a525f
   GoVersion:        go1.13.8
   MinApiVersion:    1.20
   Os:               linux
  Kubernetes:
   Version:          1.17+
-  buildDate:        2020-02-05T20:42:57Z
+  buildDate:        2020-03-31T23:36:27Z
   compiler:         gc
-  gitCommit:        ae40ab25c94b30bfd3034be3056cd84318e97a2f
+  gitCommit:        86893395d1d71a1124c208abe28ed8ac014fde17
   gitTreeState:     clean
-  gitVersion:       v1.17.2-docker-d-2
-  goVersion:        go1.13.6
+  gitVersion:       v1.17.4-docker-3
+  goVersion:        go1.13.9
   major:            1
   minor:            17+
   platform:         linux/amd64
@@ -210,27 +207,26 @@ However, UCP continues to support capturing log output in container logs for eas
 ```bash
 $ docker logs <node-name>/ucp-kubelet
 
-time="2020-03-15T05:58:32Z" level=debug msg="importing image 'docker.io/docker/ucp-hyperkube:3.3.0-beta1' into containerd"
-time="2020-03-15T05:58:48Z" level=debug msg="unpacking docker.io/docker/ucp-hyperkube:3.3.0-beta1 (sha256:da3f0fc2cf2fa0ecdc71480429c5352e9b83fe13866d2142726d8c01dca829af)"
-time="2020-03-15T05:58:55Z" level=info msg="container not found, skipping cleanup..."
-systemd-resolved is running, so using --resolv-conf=/run/systemd/resolve/resolv.conf for kubelet.
+time="2020-04-15T14:34:27Z" level=debug msg="importing image 'docker.io/docker/ucp-hyperkube:3.3.0-beta3' into containerd"
+time="2020-04-15T14:34:40Z" level=debug msg="unpacking docker.io/docker/ucp-hyperkube:3.3.0-beta3 (sha256:0a04bfb6a2d5d9a2065c874530fa492fd69a64d790abd68399dadcda62a16e86)"
+time="2020-04-15T14:34:45Z" level=info msg="container not found, skipping cleanup..."
+Using default resolv-conf location.
 Starting Kubelet...
-Flag --resolv-conf has been deprecated, This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.
-Flag --resolv-conf has been deprecated, This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.
-I0315 05:58:55.927675    7587 server.go:416] Version: v1.17.2-docker-d-2
-I0315 05:58:55.927972    7587 plugins.go:100] No cloud provider specified.
-I0315 05:58:56.013296    7587 server.go:641] --cgroups-per-qos enabled, but --cgroup-root was not specified.  defaulting to /
-I0315 05:58:56.014533    7587 container_manager_linux.go:265] container manager verified user specified cgroup-root exists: []
+I0415 14:34:48.426224    6299 flags.go:33] FLAG: --add-dir-header="false"
+I0415 14:34:48.426249    6299 flags.go:33] FLAG: --address="0.0.0.0"
 ...
 ```
 
 ```bash
-$ docker logs <node-name>/ucp-kube-proxy
-
-W0315 05:57:12.850193       1 server.go:213] WARNING: all flags other than --config, --write-config-to, and --cleanup are deprecated. Please begin using a config file ASAP.
-W0315 05:57:17.205905       1 server_others.go:323] Unknown proxy mode "", assuming iptables proxy
-E0315 05:57:17.431107       1 node.go:124] Failed to retrieve node info: nodes "ryan-3199a0-ubuntu-0" not found
-E0315 05:57:19.213620       1 node.go:124] Failed to retrieve node info: nodes "ryan-3199a0-ubuntu-0" not found
+...
+I0415 14:34:24.764184       1 flags.go:33] FLAG: --v="6"
+I0415 14:34:24.764186       1 flags.go:33] FLAG: --version="false"
+I0415 14:34:24.764190       1 flags.go:33] FLAG: --vmodule=""
+I0415 14:34:24.764192       1 flags.go:33] FLAG: --write-config-to=""
+W0415 14:34:24.764200       1 server.go:213] WARNING: all flags other than --config, --write-config-to, and --cleanup are deprecated. Please begin using a config file ASAP.
+I0415 14:34:24.764227       1 feature_gate.go:243] feature gates: &{map[]}
+I0415 14:34:24.782228       1 loader.go:375] Config loaded from file:  /ucp-volume-mounts/ucp-node-certs/kubeproxy.conf
+W0415 14:34:24.791932       1 server_others.go:323] Unknown proxy mode "", assuming iptables proxy
 ...
 ```
 
@@ -296,15 +292,15 @@ Having installed a one-node Linux-only UCP cluster, we are now ready to add addi
    # Download the installation script
    Invoke-WebRequest `
      -OutFile 'install.ps1' `
-     -Uri 'https://docker-ee-windows.s3-us-west-2.amazonaws.com/get-mirantis.ps1' `
+     -Uri 'https://get.mirantis.com/install.ps1' `
      -UseBasicParsing;
 
    # Execute the installation script
-   .\install.ps1 -dockerVersion '19.03.5';
+   .\install.ps1 -Channel 'test' -dockerVersion '19.03.8-beta3';
 
    # Logoff and log back in for PATH variables to be updated
    logoff
-   
+
    # Clean up installation script
    Remove-Item -Path 'install.ps1';
    ```
@@ -315,11 +311,11 @@ Having installed a one-node Linux-only UCP cluster, we are now ready to add addi
    ```powershell
    # Turn off PowerShell's status bar (greatly increases download performance of large files)
    $ProgressPreference = 'SilentlyContinue'
-   
+
    # Download bundled UCP images
    Invoke-WebRequest `
      -OutFile 'ucp_images.tar.gz' `
-     -Uri 'https://packages.docker.com/caas/ucp_images_win_2019_3.3.0-beta1.tar.gz' `
+     -Uri 'https://packages.docker.com/caas/ucp_images_win_2019_3.3.0-beta3.tar.gz' `
      -UseBasicParsing;
 
    # Load the archive of UCP images into Docker
