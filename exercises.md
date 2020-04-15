@@ -218,6 +218,7 @@ I0415 14:34:48.426249    6299 flags.go:33] FLAG: --address="0.0.0.0"
 ```
 
 ```bash
+$ docker logs <node-name>/ucp-kube-proxy
 ...
 I0415 14:34:24.764184       1 flags.go:33] FLAG: --v="6"
 I0415 14:34:24.764186       1 flags.go:33] FLAG: --version="false"
