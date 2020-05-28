@@ -109,7 +109,7 @@ All the exercises in this document also require you to set up both the 'kubectl'
 in order to work with your UCP cluster. You will see references to this section within the setup instructions for each of
 the exercises below. Perform these steps after you are done installing the UCP cluster for your exercise:
 
-1. Download the Docker CLI client using the instructions [here](https://docs.docker.com/ee/ucp/user-access/cli/#get-the-docker-cli-client).
+1. Download and install `Docker Desktop` for your operating system [here](https://www.docker.com/products/docker-desktop).
 2. Download the CLI client bundle from your UCP instance using the procedure [here](https://docs.docker.com/ee/ucp/user-access/cli/).
 3. Download and install `kubectl` using [this procedure](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
 
